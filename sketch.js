@@ -8,6 +8,7 @@ var chaopotter;
 var hogwartspassado;
 var castelomagico, castelomagicofoto;
 var paviocurto;
+var pomodeouro;
 
 function preload() {
  hogwartspassado = loadImage("./assets/background.gif");
@@ -28,8 +29,10 @@ function setup() {
 
   castelomagico = Bodies.rectangle(160, 350, 160, 310, chaopotter_options);
   World.add(world, castelomagico);
+  angleMode(DEGREES);
   angles=20;
 paviocurto=new Paviocurto(180,110,130,100,angles);
+pomodeouro = new PomodeOuro(paviocurto.x, paviocurto.y);
 
  
 }
@@ -47,4 +50,10 @@ function draw() {
   image(castelomagicofoto, castelomagico.position.x, castelomagico.position.y, 160, 310);
   pop();
   paviocurto.mostrar();
+  pomodeouro.mostrar();
+}
+function keyReleased(){
+  if(keyCode===DOWN_ARROW){
+    pomodeouro.leviosa();
+  }
 }
