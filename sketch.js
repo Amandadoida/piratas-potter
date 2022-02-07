@@ -10,7 +10,8 @@ var castelomagico, castelomagicofoto;
 var paviocurto;
 var pomodeouro;
 var harry=[];
-
+var voldemort;
+var ataquedovoldermort=[];
 
 function preload() {
  hogwartspassado = loadImage("./assets/background.gif");
@@ -31,9 +32,10 @@ function setup() {
 
   castelomagico = Bodies.rectangle(160, 350, 160, 310, chaopotter_options);
   World.add(world, castelomagico);
+
   angleMode(DEGREES);
   angles=20;
-paviocurto=new Paviocurto(180,110,130,100,angles);
+  paviocurto=new Paviocurto(180,110,130,100,angles);
 
  
 }
@@ -51,6 +53,9 @@ function draw() {
   image(castelomagicofoto, castelomagico.position.x, castelomagico.position.y, 160, 310);
   pop();
   paviocurto.mostrar();
+
+  magiadomal();
+
   for(var hermione=0;hermione<harry.length;hermione++){
     bombar(harry[hermione,hermione])
   }
@@ -73,7 +78,31 @@ if(bola){
 }
 
 }
+function magiadomal(){
+  if(ataquedovoldermort.length>0){
 
+    if(ataquedovoldemort[ataquedovoldemort.length-1]===undefined||ataquedovoldemort[ataquedovoldemort.length-1].body.position.x<width-300){
+       var positions=[-40,-60,-70,-20];
+       var position=random(positions);
+     
+       var voldemort = new Voldemort(width, height -100, 170, 170, position);
+       ataquedovoldemort.push(voldemort);
+    }
+
+    for(var malfoy=0;malfoy<ataquedovoldemort.length;malfoy++){
+      if(ataquedovoldemort[malfoy]){
+
+        Matter.Body.setVelocity(voldemort[malfoy].body, {x: -0.9, y:0});
+
+        voldemort[malfoy].mostrar();
+      }
+    }
+
+  }else{
+  var voldemort = new Voldemort(width, height-60, 170, 170, -60);
+  ataquedovoldemort.push(voldemort); 
+  }
+}
 
 
 

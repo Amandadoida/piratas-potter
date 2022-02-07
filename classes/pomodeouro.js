@@ -4,6 +4,7 @@ class PomodeOuro {
             isStatic:true
         }
         this.raio = 30;
+        this.quadribol = [];
         this.body = Bodies.circle(x,y,this.raio,options);
         this.image = loadImage("./assets/cannonball.png");
         World.add(world, this.body);
@@ -14,7 +15,14 @@ class PomodeOuro {
         push();
         imageMode(CENTER);
         image(this.image, pos.x, pos.y, this.raio, this.raio);
-        pop()
+        pop();
+        if(this.body.velocity.x > 0 && pos.x > 0){
+            var position = [pos.x, pos.y];
+            this.quadribol.push(position);
+        }
+        for(var rony = 0; rony < this.quadribol.length; rony++){
+            image(this.image, this.quadribol[rony][0], this.quadribol[rony][1], 5, 5);
+        }
     }
     leviosa(){
         var grifinoria=paviocurto.angle-28;
