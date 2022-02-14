@@ -10,6 +10,16 @@ class PomodeOuro {
         World.add(world, this.body);
     }
 
+    remover(index){
+
+        Matter.Body.setVelocity(this.body, {x: 0, y: 0});
+
+        setTimeout(() => {
+            Matter.World.remove(world, this.body);
+            delete harry[index];
+        }, 1000);
+    }
+
     mostrar(){
         var pos = this.body.position;
         push();
