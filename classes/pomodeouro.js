@@ -8,11 +8,22 @@ class PomodeOuro {
         this.body = Bodies.circle(x,y,this.raio,options);
         this.image = loadImage("./assets/cannonball.png");
         World.add(world, this.body);
+        this.isSink = false;
+        this.speed = 0.05;
+        this.animation = [this.image];
+    }
+
+    animar(){
+        this.speed += 0.05;
     }
 
     remover(index){
-
+        this.isSink = true;
         Matter.Body.setVelocity(this.body, {x: 0, y: 0});
+
+        this.animation = pocaoAnimation;
+        this.speed = 0.05;
+        this.raio = 150;
 
         setTimeout(() => {
             Matter.World.remove(world, this.body);
@@ -21,11 +32,17 @@ class PomodeOuro {
     }
 
     mostrar(){
+        var angle = this.body.angle;
         var pos = this.body.position;
+        var index = floor(this.speed % this.animation.length);
+
         push();
+        translate(pos.x, pos.y);
+        rotate(angle);
         imageMode(CENTER);
-        image(this.image, pos.x, pos.y, this.raio, this.raio);
+        image(this.animation[index], 0, 0, this.raio, this.raio);
         pop();
+        
         if(this.body.velocity.x > 0 && pos.x > 0){
             var position = [pos.x, pos.y];
             this.quadribol.push(position);

@@ -15,16 +15,29 @@ var ataquedovoldemort=[];
 var voldemortAnimation = [];
 var voldemortDados, voldemortSpritesheet;
 var quebravarinhaanimation = [];
-var quebravarinhadado,quebravarinhasprite;
+var quebravarinhadado, quebravarinhasprite;
+var pocaoAnimation = [];
+var pocaoDados, pocaoSprite;
+var acertouofeitico = false
+var sonserina;
+var expelliarmus;
+var avadakedavra;
+var aguamenti;
+var risonho=false;
 
 function preload() {
  hogwartspassado = loadImage("./assets/background.gif");
  castelomagicofoto = loadImage("./assets/tower.png");
  voldemortDados = loadJSON("./assets/boat/boat.json");
- voldemortSpritesheet= loadImage("./assets/boat/boat.png");
- quebravarinhadado= loadJSON("./assets/boat/brokenBoat.json");
- quebravarinhasprite=loadImage("./assets/boat/brokenBoat.png");
-
+ voldemortSpritesheet = loadImage("./assets/boat/boat.png");
+ quebravarinhadado = loadJSON("./assets/boat/brokenboat.json");
+ quebravarinhasprite = loadImage("./assets/boat/brokenboat.png");
+ pocaoDados = loadJSON("./assets/waterSplash/waterSplash.json");
+ pocaoSprite = loadImage("./assets/waterSplash/waterSplash.png");
+ sonserina=loadSound("./assets/background_music.mp3");
+ expelliarmus=loadSound("./assets/cannon_explosion.mp3");
+avadakedavra=loadSound("./assets/pirate_laugh.mp3");
+aguamenti=loadSound("./assets/cannon_water.mp3");
 }
 function setup() {
 
@@ -48,23 +61,36 @@ function setup() {
 
   var voldemortFrames = voldemortDados.frames;
 
-  for(var i = 0; i < voldemortFrames; i++){
+  for(var i = 0; i < voldemortFrames.length; i++){
     var pos = voldemortFrames[i].position;
     var img = voldemortSpritesheet.get(pos.x, pos.y, pos.w, pos.h);
     voldemortAnimation.push(img);
   }
+
   var quebravarinhaFrames = quebravarinhadado.frames;
 
-  for(var i = 0; i < quebravarinhaFrames; i++){
+  for(var i = 0; i < quebravarinhaFrames.length; i++){
     var pos = quebravarinhaFrames[i].position;
     var img = quebravarinhasprite.get(pos.x, pos.y, pos.w, pos.h);
     quebravarinhaanimation.push(img);
+  }
+
+  var pocaoFrames = pocaoDados.frames;
+
+  for(var i = 0; i < pocaoFrames.length; i++){
+    var pos = pocaoFrames[i].position;
+    var img = pocaoSprite.get(pos.x, pos.y, pos.w, pos.h);
+    pocaoAnimation.push(img);
   }
 }
 
 function draw() {
   background(189);
   image(hogwartspassado, 0, 0, 1200, 600);
+  if(!sonserina.isPlaying()){
+    sonserina.play();
+    sonserina.setVolume(0.1);
+  }
  
   Engine.update(engine);
   
@@ -86,6 +112,8 @@ function draw() {
 function keyReleased(){
   if(keyCode===DOWN_ARROW){
     harry[harry.length-1].leviosa();
+    expelliarmus.play();
+    expelliarmus.setVolume(0.1);
   }
 }
 function keyPressed(){
@@ -98,8 +126,14 @@ function keyPressed(){
 function bombar (bola,index){
 if(bola){
   bola.mostrar();
+  bola.animar();
   if(bola.body.position.x >= width || bola.body.position.y >= height-50){
     bola.remover(index);
+    if(bola.isSink===true){
+    aguamenti.playMode('untilDone');
+      aguamenti.play();
+      aguamenti.setVolume(0.1);
+    }
   } 
 }
 
@@ -122,6 +156,16 @@ function magiadomal(){
 
         ataquedovoldemort[malfoy].mostrar();
         ataquedovoldemort[malfoy].animar();
+        var guerradefeiticos = Matter.SAT.collides(castelomagico, ataquedovoldemort[malfoy].body);
+        if(guerradefeiticos.collided && !ataquedovoldemort[malfoy].quebrada){
+          if(!risonho&&!avadakedavra.isPlaying()){
+            avadakedavra.play();
+            avadakedavra.setVolume(0.5);
+            risonho=true;
+          }
+          acertouofeitico = true;
+          acabouharry();
+        }
       }
     }
 
@@ -145,9 +189,22 @@ function diabrets(index){
   }
 }
 
+function acabouharry(){
+  swal({
+    title: "Acabou o Quadribol!",
+    text: "Lufa-Lufa venceu!",
+    imageUrl: "https://raw.githubusercontent.com/whitehatjr/PiratesInvasion/main/assets/boat.png",
+    imageSize: "150x150",
+    confirmButtonText: "Jogar Novamente"
+  },
+  function(apertouoBotao){
+    if(apertouoBotao){
+      location.reload();
+    }
+  });
+}
 
-
-//exemplos de Matrizes
+/*//exemplos de Matrizes
 //Matriz simples
 var corvinal = [52, 13, 81, 46];
 //console.log(corvinal[3]);
@@ -158,4 +215,4 @@ var lufalufa = ["Amanda", 12, true];
 
 //Matriz de Matrizes
 var varinha = [[1,2], [8,9], [15,16]];
-//console.log(varinha[0][1]);
+//console.log(varinha[0][1]);*/
